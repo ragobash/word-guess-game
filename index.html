@@ -1,24 +1,40 @@
 <!DOCTYPE html>
-    <html>
-        <head>
-            <title>Hangman</title>
-            <!-- CSS -->
-            <link rel="stylesheet" type="text/css" href="assets/css/style.css">
-            <!-- Reset -->
-            <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
-        </head>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Hangman</title>
+        <link rel="stylesheet" type="text/css" href="./assets/css/reset.css">
+		<link rel="stylesheet" type="text/css" href="./assets/css/style.css">
+	</head>
+	<body background="assets/images/background.jpg" style="width: 100%;">
+        <div class="wrapper">
+		<div id="main-content">
+			
+			<div id="title">
+				<img src="assets/images/Header.png">
+			</div>
 
-        <body>
-            <h1>Hangman!</h1>
-            <header>
-                <div class="container">
-                    <h1>Hangman Game</h1>
-                    <h3>Colors</h3>
-                </div>
-            </header>
+			<div id=alerts>
+				
+			</div>
 
-                <div class="underscores"> _ _ _ _</div>
-                <div class="rightGuess">Right Guesses:</div>
-                <div class="wrongGuess">Wrong Guesses:  </div>
-        </body>
-    </html>
+			<div id="game-div" class="panel">
+				<div id="word-display">
+					<p id="word-display-letters"></p>
+				</div>
+
+				<div id="general-display">
+					<p>Guessed Letters:</p>
+					<p><span id="guessed-letters">                                </span></p>
+                    <div id="grad1" class="line"></div>
+                    <br>
+					<p>Incorrect Letters: <span id="error-count"></span></p>
+					<p>Wins: <span id="win-count"></span></p>
+					<p>Losses: <span id="loss-count"></span></p>
+				</div>
+			</div>
+		</div>
+    </div>
+		<script type="text/javascript" src="assets/javascript/hangman.js"></script>
+	</body>
+</html>
