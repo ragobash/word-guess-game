@@ -1,13 +1,14 @@
 p {
     text-align: center;
+    font-size: 20px;
+    color: white;
+    font-weight: bold;
 }
 
 body {
+  background-image: url("../images/background.jpg");
+  background-size: 100%;
   position: relative;
-  background-color: white;
-}
-
-body {
   font-family: Arial, Helvetica, sans-serif;
   color: black;
 }
@@ -18,16 +19,22 @@ body {
   margin-right: auto;
 }
 
+/* Box for alerts */
 #alerts {
-  background-color: white;
+  background-color: #302244;
   border: 5px solid transparent;
   border-image: linear-gradient(to bottom right, #b827fc 0%, #2c90fc 25%, #b8fd33 50%, #fec837 75%, #fd1892 100%);
   border-image-slice: 1;
-  height: 200px;
+  height: 100px;
   margin: 20px auto;
-  width: 500px;
+  width: 350px;
   margin: 0 auto;
-  font-size: 12px;
+  font-size: 75px;
+  color: white;
+  text-align: center;
+  padding: 50px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
 }
 
 #main-content {
@@ -36,7 +43,6 @@ body {
 }
 
 .panel {
-	background-color: white;
 	padding: 20px;
 	margin: 10px;
 }
@@ -45,15 +51,18 @@ body {
 	text-align: center;
 	font-size: 32px;
 	padding: 10px;
-	padding-bottom: 20px;
+    padding-bottom: 20px;
+    color: white; 
+    letter-spacing: 5px;
 }
 
+/* Display box for stats */
 #general-display {
-  background-color: white;
+  background-color: #302244;
   border: 5px solid transparent;
   border-image: linear-gradient(to bottom right, #b827fc 0%, #2c90fc 25%, #b8fd33 50%, #fec837 75%, #fd1892 100%);
   border-image-slice: 1;
-  height: 200px;
+  height: 125px;
   margin: 20px auto;
   width: 500px;
   margin: 0 auto;
@@ -72,4 +81,8 @@ body {
 .line {
     height: 6px;
     border-radius: 4px;
+}
+
+#guessed-letters {
+    letter-spacing: 5px;
 }

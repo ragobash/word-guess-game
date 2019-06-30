@@ -1,186 +1,116 @@
+// Create an array of words
+var words = [
+	"red",
+	"orange",
+	"yellow",
+	"green",
+	"blue",
+	"indigo",
+	"violet",
+	"aqua",
+	"ruby",
+	"emerald",
+	"sapphire",
+	"cyan",
+	"taupe",
+	"cerulean",
+	"pink",
+	"beige",
+	"black",
+	"white",
+	"brown",
+	"gray",
+	"bronze",
+	"burgundy",
+	"canary",
+	"charcoal",
+	"mohogany",
+	"cobalt",
+	"coral",
+	"cream",
+	"olive",
+	"denim",
+	"ebony",
+	"eggplant",
+	"gold",
+
+];
+	
+// Pick a random word
+var word = randomWord();
+var answer = "";
+var guesses = [];
 var wins = 0;
 var losses = 0;
+var remainingGuesses = 10;
+var needsReset = false;
 
-var maxErrors = 9;
+createAnswer();
+displayStats();
 
-var wordDisplayLettersElement = document.getElementById("word-display-letters");
-var guessedLettersElement = document.getElementById("guessed-letters");
-var errorCountElement = document.getElementById("error-count");
-var winCountElement = document.getElementById("win-count");
-var lossCountElement = document.getElementById("loss-count");
+function reset() {
+	word = randomWord();
+	answer = "";
+	guesses = [];
+	remainingGuesses = 10;
+	needsReset = false;
+	createAnswer();
+	displayStats();
+	document.getElementById("alerts").innerText="";
+}
 
-var blinkElements = document.getElementsByClassName("blinking");
-var alertLineElements = document.getElementsByClassName("alert-line");
+function randomWord() {
+	return words[Math.floor(Math.random() * words.length)];
+}
 
-var validGuesses = [ 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' ];
+//Set up the answer answer
+function createAnswer() {
+	for (var i = 0; i < word.length; i++) {
+		answer += "_";
+	}
+}
 
-var pressAnyKeyToStart = [
-	" ___                                       _                _              _               _   ",
-	"| _ \\ _ _  ___  ___ ___  __ _  _ _  _  _  | |__ ___  _  _  | |_  ___   ___| |_  __ _  _ _ | |_ ",
-	"|  _/| '_|/ -_)(_-<(_-< / _` || ' \\| || | | / // -_)| || | |  _|/ _ \\ (_-<|  _|/ _` || '_||  _|",
-	"|_|  |_|  \\___|/__//__/ \\__,_||_||_|\\_, | |_\\_\\\\___| \\_, |  \\__|\\___/ /__/ \\__|\\__,_||_|   \\__|",
-	"                                    |__/             |__/                                      "
-];
-var pressAnyKeyToReset = [
-	" ___                                       _                _                              _   ",
-	"| _ \\ _ _  ___  ___ ___  __ _  _ _  _  _  | |__ ___  _  _  | |_  ___    _ _  ___  ___ ___ | |_ ",
-	"|  _/| '_|/ -_)(_-<(_-< / _` || ' \\| || | | / // -_)| || | |  _|/ _ \\  | '_|/ -_)(_-</ -_)|  _|",
-	"|_|  |_|  \\___|/__//__/ \\__,_||_||_|\\_, | |_\\_\\\\___| \\_, |  \\__|\\___/  |_|  \\___|/__/\\___| \\__|",
-	"                                    |__/             |__/                                      "
-];
-
-var youWin = [
-	"__  __ ____   __  __   _      __ ____ _  __",
-	"\\ \\/ // __ \\ / / / /  | | /| / //  _// |/ /",
-	" \\  // /_/ // /_/ /   | |/ |/ /_/ / /    / ",
-	" /_/ \\____/ \\____/    |__/|__//___//_/|_/  ",
-	"                                           "
-];
-var youLose = [
-	"__  __ ____   __  __  __   ____   ____ ____",
-	"\\ \\/ // __ \\ / / / / / /  / __ \\ / __// __/",
-	" \\  // /_/ // /_/ / / /__/ /_/ /_\\ \\ / _/  ",
-	" /_/ \\____/ \\____/ /____/\\____//___//___/  ",
-	"                                           "
-];
-var emptyAlert = [
-	"                                           ",
-	"                                           ",
-	"                                           ",
-	"                                           ",
-	"                                           "
-];
-
-var game = new Hangman();
-
+function displayStats() {
+	document.getElementById("word-display-letters").innerText = answer;
+	document.getElementById("error-count").innerText = remainingGuesses;
+	document.getElementById("win-count").innerText = wins;
+	document.getElementById("loss-count").innerText = losses;
+	document.getElementById("guessed-letters").innerText = guesses;
+}
+	
 document.onkeyup = function(event) {
-	var userGuess = event.key;
-
-	if (!game.gameOver) {
-		if (validGuesses.includes(userGuess) && !game.guessedLetters.includes(userGuess)) {
-			game.checkGuess(userGuess);
+	var guess = event.key;
+	if (!guesses.includes(guess) && !needsReset) {
+		guesses.push(guess);
+		if (word.includes(guess)) {
+			reveal(guess);
 		}
-	} else {
-		game = new Hangman();
-		game.updatePageData();
-	}
-}
-
-window.setInterval(function() {
-	if (blinkElements.length > 0) {
-		if (game.guessedLetters.length === 0 || game.gameOver) {
-			if (blinkElements[0].style.opacity === "1") {
-				for (var i = 0; i < blinkElements.length; i++) {
-					blinkElements[i].style.opacity = "0";
-				}
-			} else {
-				for (var i = 0; i < blinkElements.length; i++) {
-					blinkElements[i].style.opacity = "1";
-				}
-			}
-		} else {
-			for (var i = 0; i < blinkElements.length; i++) {
-				blinkElements[i].style.opacity = "0";
-			}
+		else {
+			remainingGuesses--;
 		}
 	}
-}, 750);
-
-function Hangman() {
-	this.wordList = [
-		"violet",
-		"aqua",
-		"cyan",
-		"yellow",
-		"orange",
-		"red",
-		"blue",
-		"green"
-	]
-
-	this.word = this.wordList[Math.floor(Math.random() * this.wordList.length)];
-	this.guessedLetters = [];
-	this.errors = 0;
-	this.visibleLetters = [];
-	this.gameOver = false;
-	this.alertLines = emptyAlert;
-	for (var i = 0; i < this.word.length; i++) {
-		this.visibleLetters[i] = (false);
+	if (needsReset) {
+		reset();
 	}
-}
-
-Hangman.prototype.checkGuess = function(char) {
-	this.guessedLetters.push(char);
-
-	var isInWord = false;
-	for (var i = 0; i < this.word.length; i++) {
-		if (this.word.charAt(i) === char) {
-			isInWord = true;
-			this.visibleLetters[i] = true;
-		}
-	}
-	if (!isInWord) {
-		this.errors++;
-	}
-
-	if (this.errors >= maxErrors) {
-		losses++;
-		this.alertLines = youLose;
-		this.gameOver = true;
-	}
-
-	if (!this.visibleLetters.includes(false)) {
+	if (!answer.includes("_")) {
 		wins++;
-		this.alertLines = youWin;
-		this.gameOver = true;
+		document.getElementById("alerts").innerHTML="You win!";
+		needsReset = true;
 	}
-
-	game.updatePageData();
-};
-
-Hangman.prototype.updatePageData = function() {
-	var tempString = "";
-	for (var i = 0; i < this.visibleLetters.length; i++) {
-		tempString += ((this.visibleLetters[i] || this.gameOver) ? this.word.charAt(i).toUpperCase() : "_");
-		if (i < (this.visibleLetters.length - 1)) tempString += " ";
+	else if (remainingGuesses === 0) {
+		losses++;
+		document.getElementById("alerts").innerHTML="You lose!<br><p>"+ word +"</p>";
+		needsReset = true;
 	}
-	wordDisplayLettersElement.textContent = tempString;
+	displayStats();
+}
 
-	tempString = "";
-	for (var i = 0; i < this.guessedLetters.length; i++) {
-		tempString += (this.guessedLetters[i].toUpperCase());
-		if (i < (this.guessedLetters.length - 1)) tempString += " ";
-	}
-	for (var i = tempString.length; i < 51; i++) {
-		tempString += " ";
-	}
-	guessedLettersElement.textContent = tempString;
-
-	tempString = this.errors + " / " + maxErrors;
-	for (var i = tempString.length; i < 32; i++) {
-		tempString += " ";
-	}
-	errorCountElement.textContent = tempString;
-
-	tempString = wins + "";
-	for (var i = tempString.length; i < 45; i++) {
-		tempString += " ";
-	}
-	winCountElement.textContent = tempString;
-
-	tempString = losses + "";
-	for (var i = tempString.length; i < 43; i++) {
-		tempString += " ";
-	}
-	lossCountElement.textContent = tempString;
-
-	for (var i = 0; i < blinkElements.length; i++) {
-		blinkElements[i].textContent = (this.gameOver ? pressAnyKeyToReset[i] : pressAnyKeyToStart[i]);
-	}
-
-	for (var i = 0; i < alertLineElements.length; i++) {
-		alertLineElements[i].textContent = (this.alertLines[i]);
+function reveal(guess) {
+	for (var i = 0; i < word.length; i++) {
+		if (word[i] === guess) {
+			answer = answer.substr(0, i) + guess + answer.substr(i + 1);
+		}
 	}
 }
 
-game.updatePageData();
+	
